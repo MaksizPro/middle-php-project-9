@@ -12,7 +12,7 @@ return function (App $app) {
 
         $renderer = new PhpRenderer('../templates', ['title' => 'Главная', 'allert' => 'dasdsd']);
         $renderer->setLayout('layouts/app.php');
-    
+
         return $renderer->render($response, 'index.php', [
             'name' => 'John',
         ]);
