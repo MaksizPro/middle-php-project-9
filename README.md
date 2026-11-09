@@ -7,6 +7,10 @@
 Учебный проект Хекслета: https://ru.hexlet.io/programs/middle-php
 Как это должно работать: https://files.hexlet.app/a/tefi04
 
+## Ссылка
+
+Ссылка для проверки: https://middle-php-project-9.onrender.com/
+
 ## Стек
 
 - PHP
