@@ -6,6 +6,7 @@ build: install build-css
 
 install:
 	composer install
+	npm install
 
 build-css:
 	npm run build:css
