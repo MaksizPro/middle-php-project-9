@@ -55,6 +55,10 @@ $repositories = require __DIR__ . '/../app/repositories.php';
 $repositories($containerBuilder);
 
 //slim/flash
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 $containerBuilder->addDefinitions(
     [
         'flash' => function () {
@@ -86,7 +90,6 @@ $app->add(
         return $next->handle($request);
     }
 );
-$app->addErrorMiddleware(true, true, true);
 
 // Register middleware
 $middleware = require __DIR__ . '/../app/middleware.php';
