@@ -18,7 +18,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 //env file
 $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();
+$dotenv->safeLoad();
 
 //DB connection ORM
 $parsed = parse_url($_ENV['DATABASE_URL']);
