@@ -63,10 +63,6 @@ $containerBuilder->addDefinitions(
         }
     ]
 );
-AppFactory::setContainer($containerBuilder->build());
-
-
-
 
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
