@@ -17,8 +17,11 @@ use Slim\Flash\Messages;
 require __DIR__ . '/../vendor/autoload.php';
 
 //env file
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->safeLoad();
+try {
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv->safeLoad();
+} catch (\Throwable $th) {
+}
 
 //DB connection ORM
 $parsed = parse_url($_ENV['DATABASE_URL']);
