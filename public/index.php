@@ -29,6 +29,9 @@ $user = $parsed['user'] ?? '';
 $pass = $parsed['pass'] ?? '';
 $db   = ltrim($parsed['path'] ?? '', '/');
 $driver = $parsed['scheme'] ?? 'mysql';
+if ($driver == 'postgresql') {
+    $driver = 'pgsql';
+}
 $dsn = "$driver:host=$host;port=$port;dbname=$db";
 Model::setConnection(new PDO($dsn, $user, $pass));
 
