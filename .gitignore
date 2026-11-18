@@ -7,3 +7,4 @@
 .phpunit.result.cache
 node_modules/
 public/assets/css/main.css
+.env

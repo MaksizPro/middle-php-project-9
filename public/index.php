@@ -7,10 +7,30 @@ use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
+use Dotenv\Dotenv;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use App\Models\Model;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Slim\Flash\Messages;
 
 require __DIR__ . '/../vendor/autoload.php';
+
+//env file
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
+//DB connection ORM
+$parsed = parse_url($_ENV['DATABASE_URL']);
+
+$host = $parsed['host'] ?? '127.0.0.1';
+$port = $parsed['port'] ?? 3306;
+$user = $parsed['user'] ?? '';
+$pass = $parsed['pass'] ?? '';
+$db   = ltrim($parsed['path'] ?? '', '/');
+$driver = $parsed['scheme'] ?? 'mysql';
+$dsn = "$driver:host=$host;port=$port;dbname=$db";
+Model::setConnection(new PDO($dsn, $user, $pass));
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
@@ -31,6 +51,20 @@ $dependencies($containerBuilder);
 $repositories = require __DIR__ . '/../app/repositories.php';
 $repositories($containerBuilder);
 
+//slim/flash
+$containerBuilder->addDefinitions(
+    [
+        'flash' => function () {
+            $storage = [];
+            return new Messages($storage);
+        }
+    ]
+);
+AppFactory::setContainer($containerBuilder->build());
+
+
+
+
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 
@@ -38,6 +72,22 @@ $container = $containerBuilder->build();
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();
+
+//slim/flash
+$app->add(
+    function ($request, $next) {
+        // Start PHP session
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        // Change flash message storage
+        $this->get('flash')->__construct($_SESSION);
+
+        return $next->handle($request);
+    }
+);
+$app->addErrorMiddleware(true, true, true);
 
 // Register middleware
 $middleware = require __DIR__ . '/../app/middleware.php';
