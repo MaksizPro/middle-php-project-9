@@ -43,12 +43,16 @@ return function (App $app) {
         }
 
         $parsedUrl = parse_url($formData['url']);
+        $normalizedDomain = $parsedUrl['host'];
         $normalizedScheme = 'http';
         if (preg_match('/h+t{2,}p+s+/', $parsedUrl['scheme'])) {
             $normalizedScheme = 'https';
         }
+        if (isset($parsedUrl['user'])) {
+            $normalizedDomain = $parsedUrl['user'] . '@' . $normalizedDomain;
+        }
 
-        $formDataUrlCleared = "{$normalizedScheme}://{$parsedUrl['host']}";
+        $formDataUrlCleared = "{$normalizedScheme}://{$normalizedDomain}";
         $url = Url::where('name', $formDataUrlCleared)->first();
 
         if (!$url) {
