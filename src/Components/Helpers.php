@@ -11,9 +11,11 @@ class Helpers
 
     public static function trimLongTextInArray(array $arr, array $keys): array
     {
-        foreach ($keys as $value) {
-            if(isset($arr[$value]) && is_string($arr[$value])){
-                $arr[$value] = self::trimLongText($arr[$value]);
+        foreach ($keys as $key) {
+            foreach ($arr as $value) {
+                if(isset($value[$key]) && is_string($value[$key])){
+                    $value[$key] = self::trimLongText($value[$key]);
+                }
             }
         }
         return $arr;

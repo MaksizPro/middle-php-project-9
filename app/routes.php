@@ -80,6 +80,8 @@ return function (App $app) {
         $renderer = new PhpRenderer('../templates', $templatesData);
         $renderer->setLayout('layouts/app.php');
 
+        //dd(Helpers::trimLongTextInArray($url->checks, ['h1', 'title', 'description']));
+
         return $renderer->render($response, 'urls-show.php', [
             'id' => $url->id,
             'url' => $url->name,
