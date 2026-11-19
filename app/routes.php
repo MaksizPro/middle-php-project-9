@@ -45,19 +45,15 @@ return function (App $app) {
         $parsedUrl = parse_url($formData['url']);
         $formDataUrlCleared = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
 
-        if (isset($parsedUrl['path']) && $parsedUrl['path'] !== '/') {
-            $formDataUrlCleared .= $parsedUrl['path'];
-        }
-
         $url = Url::where('name', $formDataUrlCleared)->first();
 
         if (!$url) {
             $url = new Url();
             $url->name = $formDataUrlCleared;
             $url->save();
-            $this->get('flash')->addMessage('successes', 'Страница успешно добавлена');
+            $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
         } else {
-            $this->get('flash')->addMessage('successes', 'Страница уже существует');
+            $this->get('flash')->addMessage('success', 'Страница уже существует');
         }
 
         $url = RouteContext::fromRequest($request)->getRouteParser()->urlFor('urls.show', ['id' => $url->id]);
@@ -74,8 +70,8 @@ return function (App $app) {
             'title' => 'Главная'
         ];
 
-        if (isset($messages['successes']) && count($messages['successes'])) {
-            $templatesData['successes'] = $messages['successes'];
+        if (isset($messages['success']) && count($messages['success'])) {
+            $templatesData['success'] = $messages['success'];
         }
         if (isset($messages['errors']) && count($messages['errors'])) {
             $templatesData['errors'] = $messages['errors'];
@@ -143,7 +139,7 @@ return function (App $app) {
             $check->description = $crawler->filter('meta[name="description"]')->extract(['content'])[0] ?? null;
             $check->save();
 
-            $this->get('flash')->addMessage('successes', 'Страница успешно проверена');
+            $this->get('flash')->addMessage('success', 'Страница успешно проверена');
         } catch (\Throwable $th) {
             $this->get('flash')->addMessage('errors', 'Произошла ошибка при проверке, не удалось подключиться');
         }
