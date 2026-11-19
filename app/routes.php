@@ -19,7 +19,7 @@ return function (App $app) {
         return $renderer->render($response, 'index.php');
     });
 
-    $app->post('/', function (Request $request, Response $response) {
+    $app->post('/urls', function (Request $request, Response $response) {
 
         $formData = $request->getParsedBody();
         $v = new Valitron\Validator(['url' => $formData['url']]);
