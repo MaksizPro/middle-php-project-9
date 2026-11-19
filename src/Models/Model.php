@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use ArrayAccess;
 
-abstract class Model
+abstract class Model implements ArrayAccess
 {
     protected static \PDO $pdo;
     protected static string $table = '';
@@ -31,6 +32,39 @@ abstract class Model
     public function __isset(string $key): bool
     {
         return isset($this->attributes[$key]);
+    }
+
+    public function offsetGet(mixed $key): mixed
+    {
+        if (property_exists($this, (string) $key)) {
+            return $this->$key;
+        }
+        return $this->attributes[$key] ?? null;
+    }
+
+    public function offsetSet(mixed $key, mixed $value): void
+    {
+        if ($key === null) {
+            $this->attributes[] = $value;
+        } elseif (property_exists($this, (string) $key)) {
+            $this->$key = $value;
+        } else {
+            $this->attributes[$key] = $value;
+        }
+    }
+
+    public function offsetExists(mixed $key): bool
+    {
+        return property_exists($this, (string) $key) || isset($this->attributes[$key]);
+    }
+
+    public function offsetUnset(mixed $key): void
+    {
+        if (property_exists($this, (string) $key)) {
+            unset($this->$key);
+        } else {
+            unset($this->attributes[$offset]);
+        }
     }
 
     public static function __callStatic(string $method, array $arguments): mixed
