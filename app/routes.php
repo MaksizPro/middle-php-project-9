@@ -26,7 +26,8 @@ return function (App $app) {
 
         $v->rule('required', 'url')->message('{field} не должен быть пустым');
         $v->rule('lengthMax', 'url', 255)->message('{field} превышает 255 символов');
-        $v->rule('regex', 'url', '/^(?:h+t{2,}p+(s+)?:+\/+).*\..*$/')->message('Некорректный {field}');
+        $v->rule('url', 'url')->message('Некорректный {field}');
+        //$v->rule('regex', 'url', '/^(?:h+t{2,}p+(s+)?:+\/+).*\..*$/')->message('Некорректный {field}');
 
         $templatesData = [
             'title' => 'Главная'
@@ -42,17 +43,21 @@ return function (App $app) {
             ])->withStatus(422);
         }
 
-        $parsedUrl = parse_url($formData['url']);
-        $normalizedDomain = $parsedUrl['host'];
-        $normalizedScheme = 'http';
-        if (preg_match('/h+t{2,}p+s+/', $parsedUrl['scheme'])) {
-            $normalizedScheme = 'https';
-        }
-        if (isset($parsedUrl['user'])) {
-            $normalizedDomain = $parsedUrl['user'] . '@' . $normalizedDomain;
-        }
+        // $parsedUrl = parse_url($formData['url']);
+        // $normalizedDomain = $parsedUrl['host'];
+        // $normalizedScheme = 'http';
+        // if (preg_match('/h+t{2,}p+s+/', $parsedUrl['scheme'])) {
+        //     $normalizedScheme = 'https';
+        // }
+        // if (isset($parsedUrl['user'])) {
+        //     $normalizedDomain = $parsedUrl['user'] . '@' . $normalizedDomain;
+        // }
 
-        $formDataUrlCleared = "{$normalizedScheme}://{$normalizedDomain}";
+        //$formDataUrlCleared = "{$normalizedScheme}://{$normalizedDomain}";
+
+        $parsedUrl = parse_url($formData['url']);
+        $formDataUrlCleared = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
+
         $url = Url::where('name', $formDataUrlCleared)->first();
 
         if (!$url) {
