@@ -26,7 +26,7 @@ return function (App $app) {
 
         $v->rule('required', 'url')->message('{field} не должен быть пустым');
         $v->rule('lengthMax', 'url', 255)->message('{field} превышает 255 символов');
-        $v->rule('url', 'url')->message('Некорректный {field}');
+        $v->rule('regex', 'url', '/^.*\/\/.*\..*$/')->message('Некорректный {field}');
 
         $templatesData = [
             'title' => 'Главная'
@@ -43,7 +43,7 @@ return function (App $app) {
         }
 
         $parsedUrl = parse_url($formData['url']);
-        $formDataUrlCleared = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
+        $formDataUrlCleared = "https://{$parsedUrl['host']}";
 
         $url = Url::where('name', $formDataUrlCleared)->first();
 
