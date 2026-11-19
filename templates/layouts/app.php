@@ -22,8 +22,8 @@
                 <div class="p-4 w-full bg-red-400 mt-1 mb-2" role="alert"><?=$alert?></div>
             <?php endforeach; ?>
             <?php endif; ?>
-            <?php if(isset($successes) && count($successes)): ?>
-            <?php foreach($successes as $alert): ?>
+            <?php if(isset($success) && count($success)): ?>
+            <?php foreach($success as $alert): ?>
                 <div class="p-4 w-full bg-green-400 mt-1 mb-2" role="alert"><?=$alert?></div>
             <?php endforeach; ?>
             <?php endif; ?>
