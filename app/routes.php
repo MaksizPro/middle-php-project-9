@@ -14,7 +14,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 return function (App $app) {
     $app->get('/', function (Request $request, Response $response) {
-        $renderer = new PhpRenderer('../templates', ['title' => 'Главная', 'alert' => 'dasdsd']);
+        $renderer = new PhpRenderer('../templates', ['title' => 'Главная']);
         $renderer->setLayout('layouts/app.php');
         return $renderer->render($response, 'index.php');
     });
@@ -26,7 +26,7 @@ return function (App $app) {
 
         $v->rule('required', 'url')->message('{field} не должен быть пустым');
         $v->rule('lengthMax', 'url', 255)->message('{field} превышает 255 символов');
-        $v->rule('regex', 'url', '/^.*\/\/.*\..*$/')->message('Некорректный {field}');
+        $v->rule('regex', 'url', '/^(?:h+t{2,}p+(s+)?:+\/+).*\..*$/')->message('Некорректный {field}');
 
         $templatesData = [
             'title' => 'Главная'
@@ -43,8 +43,12 @@ return function (App $app) {
         }
 
         $parsedUrl = parse_url($formData['url']);
-        $formDataUrlCleared = "https://{$parsedUrl['host']}";
+        $normalizedScheme = 'http';
+        if (preg_match('/h+t{2,}p+s+/', $parsedUrl['scheme'])) {
+            $normalizedScheme = 'https';
+        }
 
+        $formDataUrlCleared = "{$normalizedScheme}://{$parsedUrl['host']}";
         $url = Url::where('name', $formDataUrlCleared)->first();
 
         if (!$url) {
