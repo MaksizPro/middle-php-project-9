@@ -38,12 +38,12 @@
                 <tbody>
                     <?php foreach($checks as $check): ?>
                     <tr>
-                        <td class="px-3 py-2"><?=htmlspecialchars($check->id)?></td>
-                        <td class="px-3 py-2"><?=htmlspecialchars($check->status_code)?></td>
-                        <td class="px-3 py-2"><?=htmlspecialchars($check->h1)?></td>
-                        <td class="px-3 py-2"><?=htmlspecialchars($check->title)?></td>
-                        <td class="px-3 py-2"><?=htmlspecialchars($check->description)?></td>
-                        <td class="px-3 py-2"><?=htmlspecialchars($check->created_at)?></td>
+                        <td class="px-3 py-2"><?=htmlspecialchars($check['id'] ?? '')?></td>
+                        <td class="px-3 py-2"><?=htmlspecialchars($check['status_code'] ?? '')?></td>
+                        <td class="px-3 py-2"><?=htmlspecialchars($check['h1'] ?? '')?></td>
+                        <td class="px-3 py-2"><?=htmlspecialchars($check['title'] ?? '')?></td>
+                        <td class="px-3 py-2"><?=htmlspecialchars($check['description'] ?? '')?></td>
+                        <td class="px-3 py-2"><?=htmlspecialchars($check['created_at'] ?? '')?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
