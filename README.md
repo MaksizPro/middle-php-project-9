@@ -24,9 +24,12 @@
 git clone https://github.com/MaksizPro/middle-php-project-9.git
 cd middle-php-project-9
 ```
+
 После клонирования запустить:
----
+
+```bash
 make setup
+```
 
 Переменные окружения
 ---
