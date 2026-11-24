@@ -1,5 +1,6 @@
 # Анализатор страниц (PHP)
 
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=MaksizPro_middle-php-project-9&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=MaksizPro_middle-php-project-9)
 [![hexlet-check](https://github.com/MaksizPro/middle-php-project-9/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/MaksizPro/middle-php-project-9/actions)
 
 Создадите полноценное веб-приложение, которое выполняет запросы по сети и сохраняет данные в базу данных. Настроите CI и выполните деплой.
