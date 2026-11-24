@@ -24,6 +24,15 @@
 git clone https://github.com/MaksizPro/middle-php-project-9.git
 cd middle-php-project-9
 ```
+После клонирования запустить:
+make setup
+
+Переменные окружения
+DATABASE_URL - подключение к БД (pgsql://user:password@host:port/dbname)
+DISPLAY_ERROR_DETAILS - детализировать вывод ошибок (по умолчанию false)
+
+Файл .env
+В корне можно создать файл .env и записывать в него переменные окружения.
 
 ## Использование
 
