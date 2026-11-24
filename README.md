@@ -31,6 +31,17 @@ cd middle-php-project-9
 make setup
 ```
 
+Для создания БД (файл database.sql в корне проекта):
+
+```bash
+psql -a -d pgsql://user:password@host:port/dbname -f database.sql
+```
+
+Или через переменную окружения
+```bash
+psql -a -d $DATABASE_URL -f database.sql
+```
+
 Переменные окружения
 ---
 - DATABASE_URL - подключение к БД (pgsql://user:password@host:port/dbname)
