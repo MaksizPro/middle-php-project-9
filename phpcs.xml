@@ -1,17 +1,22 @@
 <?xml version="1.0"?>
-<ruleset name="Slim coding standard">
-    <description>Slim coding standard</description>
-
+<ruleset name="middle-php-project-9">
     <!-- display progress -->
     <arg value="p"/>
     <!-- use colors in output -->
     <arg name="colors"/>
 
-    <!-- inherit rules from: -->
-    <rule ref="PSR12"/>
+    <rule ref="PSR12">
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+    </rule>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="150"/>
+        </properties>
+    </rule>
 
     <!-- Paths to check -->
+    <file>app</file>
+    <file>public</file>
     <file>src</file>
-    <file>tests</file>
 </ruleset>

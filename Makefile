@@ -12,12 +12,10 @@ build-css:
 	npm run build:css
 
 test-php:
-	vendor/bin/phpcs ./app
-	vendor/bin/phpcs ./public
+	vendor/bin/phpcs
 
 test-php-clean:
-	vendor/bin/phpcbf ./app
-	vendor/bin/phpcbf ./public
+	vendor/bin/phpcbf
 
 start:
 	PHP_CLI_SERVER_WORKERS=5 php -S 0.0.0.0:$(PORT) -t public -d variables_order=EGPCS

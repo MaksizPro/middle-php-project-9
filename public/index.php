@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Application\Handlers\HttpErrorHandler;
-use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use App\Application\Settings\SettingsInterface;
+use App\Application\Handlers\CustomErrorHandler;
+use App\Models\Model;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Models\Model;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Flash\Messages;
+use Slim\Views\PhpRenderer;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -57,16 +57,20 @@ $repositories = require __DIR__ . '/../app/repositories.php';
 $repositories($containerBuilder);
 
 //slim/flash
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
 $containerBuilder->addDefinitions(
     [
-        'flash' => function () {
-            $storage = [];
-            return new Messages($storage);
-        }
+        PhpRenderer::class => function () {
+            $renderer = new PhpRenderer(__DIR__ . '/../templates', [
+                'title' => 'Страница',
+            ]);
+            $renderer->setLayout('layouts/app.php');
+            return $renderer;
+        },
+        Messages::class => function () {
+            return new Messages();
+        },
+        //убрать после переноса кода в Controllers
+        'flash' => \DI\get(Messages::class),
     ]
 );
 
@@ -78,19 +82,9 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();
 
-//slim/flash
-$app->add(
-    function ($request, $next) {
-        // Start PHP session
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-        // Change flash message storage
-        $this->get('flash')->__construct($_SESSION);
-
-        return $next->handle($request);
-    }
+$container->get(PhpRenderer::class)->addAttribute(
+    'routeParser',
+    $app->getRouteCollector()->getRouteParser()
 );
 
 // Register middleware
@@ -112,13 +106,10 @@ $logErrorDetails = $settings->get('logErrorDetails');
 $serverRequestCreator = ServerRequestCreatorFactory::create();
 $request = $serverRequestCreator->createServerRequestFromGlobals();
 
+
 // Create Error Handler
 $responseFactory = $app->getResponseFactory();
-$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
-
-// Create Shutdown Handler
-$shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);
-register_shutdown_function($shutdownHandler);
+$callableResolver = $app->getCallableResolver();
 
 // Add Routing Middleware
 $app->addRoutingMiddleware();
@@ -126,9 +117,9 @@ $app->addRoutingMiddleware();
 // Add Body Parsing Middleware
 $app->addBodyParsingMiddleware();
 
-// Add Error Middleware
+$customErrorHandler = new CustomErrorHandler($callableResolver, $responseFactory, $app->getContainer()->get(PhpRenderer::class));
 $errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, $logError, $logErrorDetails);
-$errorMiddleware->setDefaultErrorHandler($errorHandler);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 // Run App & Emit Response
 $response = $app->handle($request);

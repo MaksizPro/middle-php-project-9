@@ -13,7 +13,7 @@ class Helpers
     {
         foreach ($keys as $key) {
             foreach ($arr as $value) {
-                if(isset($value[$key]) && is_string($value[$key])){
+                if (isset($value[$key]) && is_string($value[$key])) {
                     $value[$key] = self::trimLongText($value[$key]);
                 }
             }

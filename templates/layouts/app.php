@@ -7,12 +7,12 @@
     <div class="flex flex-col min-h-screen max-w-7xl m-auto">
         <header class="flex px-4 py-4 gap-x-5 bg-gray-800 mb-2">
             <div class="text-gray-200">
-                <a href="/">Анализатор страниц</a>
+                <a href="<?=htmlspecialchars($routeParser->urlFor('index'))?>">Анализатор страниц</a>
             </div>
             <nav>
                 <ul class="flex gap-x-3 text-gray-400">
-                    <li><a href="/">Главная</a></li>
-                    <li><a href="/urls">Сайты</a></li>
+                    <li><a href="<?=htmlspecialchars($routeParser->urlFor('index'))?>">Главная</a></li>
+                    <li><a href="<?=htmlspecialchars($routeParser->urlFor('urls.index'))?>">Сайты</a></li>
                 </ul>
             </nav>
         </header>

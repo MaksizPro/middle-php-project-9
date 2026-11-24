@@ -9,5 +9,4 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: composer i
-      - run: vendor/bin/phpcs ./app
-      - run: vendor/bin/phpcs ./public
+      - run: vendor/bin/phpcs

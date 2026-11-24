@@ -24,10 +24,11 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
+        "ext-pdo": "*",
         "guzzlehttp/guzzle": "^8.5",
         "monolog/monolog": "^2.8",
         "nesbot/carbon": "^3.15",
-        "php-di/php-di": "^6.4",
+        "php-di/php-di": "^7.1",
         "slim/flash": "^0.4.0",
         "slim/php-view": "^3.4",
         "slim/psr7": "^1.5",

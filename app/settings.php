@@ -13,7 +13,9 @@ return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
         SettingsInterface::class => function () {
             return new Settings([
-                'displayErrorDetails' => true, // Should be set to false in production
+                'displayErrorDetails' => isset($_ENV['DISPLAY_ERROR_DETAILS']) ?
+                    filter_var($_ENV['DISPLAY_ERROR_DETAILS'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE)
+                    : false,
                 'logError'            => false,
                 'logErrorDetails'     => false,
                 'logger' => [
